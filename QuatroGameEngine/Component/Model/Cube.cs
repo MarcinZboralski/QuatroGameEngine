@@ -20,45 +20,38 @@ namespace QuatroGameEngine.Component.Model
            VertexsList.Add(new Vector3(-10.0f, -10.0f, -10.0f));
            VertexsList.Add(new Vector3(-10.0f, -10.0f, 10.0f));
 
-           GL.Color3(1.0, 0.0, 1.0);
-
            VertexsList.Add(new Vector3(10.0f, 10.0f, 10.0f));
            VertexsList.Add(new Vector3(10.0f, 10.0f, -10.0f));
            VertexsList.Add(new Vector3(10.0f, -10.0f, -10.0f));
            VertexsList.Add(new Vector3(10.0f, -10.0f, 10.0f));
-
-           GL.Color3(0.0, 1.0, 1.0);
 
            VertexsList.Add(new Vector3(10.0f, -10.0f, 10.0f));
            VertexsList.Add(new Vector3(10.0f, -10.0f, -10.0f));
            VertexsList.Add(new Vector3(-10.0f, -10.0f, -10.0f));
            VertexsList.Add(new Vector3(-10.0f, -10.0f, 10.0f));
 
-           GL.Color3(1.0, 0.0, 0.0);
-
            VertexsList.Add(new Vector3(10.0f, 10.0f, 10.0f));
            VertexsList.Add(new Vector3(10.0f, 10.0f, -10.0f));
            VertexsList.Add(new Vector3(-10.0f, 10.0f, -10.0f));
            VertexsList.Add(new Vector3(-10.0f, 10.0f, 10.0f));
-
-           GL.Color3(0.0, 1.0, 0.0);
 
            VertexsList.Add(new Vector3(10.0f, 10.0f, -10.0f));
            VertexsList.Add(new Vector3(10.0f, -10.0f, -10.0f));
            VertexsList.Add(new Vector3(-10.0f, -10.0f, -10.0f));
            VertexsList.Add(new Vector3(-10.0f, 10.0f, -10.0f));
 
-           GL.Color3(0.0, 0.0, 1.0);
-
            VertexsList.Add(new Vector3(10.0f, 10.0f, 10.0f));
            VertexsList.Add(new Vector3(10.0f, -10.0f, 10.0f));
            VertexsList.Add(new Vector3(-10.0f, -10.0f, 10.0f));
            VertexsList.Add(new Vector3(-10.0f, 10.0f, 10.0f));
-           
-           RenderFigure(pos,color);
+
+           base.color = color;
+           base.pos = pos;
+
+           RenderFigure();
         }
 
-        public override void RenderFigure(Vector3 pos,Color color)
+        public override void RenderFigure()
        {
             GL.Begin(PrimitiveType.Quads);
            foreach (var vector3 in VertexsList)

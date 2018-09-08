@@ -17,8 +17,8 @@ namespace QuatroGameEngine
         private Vector3 currPos = new Vector3(0,0,0);
         private float root = 0f;
         private float root1 = 0f;
-        
 
+        public Scene CurentScene;
         public static GameWindow Window;
         public GameEngineWindow(GameWindow window)
         {
@@ -32,19 +32,38 @@ namespace QuatroGameEngine
             Window.Resize += Resize;
             Window.RenderFrame += Render;
             Window.Run(1.0f/60f);
+            InitScene();
+           
         }
 
-        private void KeyboardControler(Vector3 campos,float root)
+        private void InitScene()
         {
-          
+            CurentScene = new Scene();
+
+            CurentScene.ResetScene();
+
+            CurentScene.AddToScene(new Plane(new Vector3(0, 0, 0), Color.Gold));
+
+            CurentScene.AddToScene(new Cube(new Vector3(-20, 0, 0), Color.Blue));
+            CurentScene.AddToScene(new Cube(new Vector3(20, 0, 0), Color.Red));
+            CurentScene.AddToScene(new Cube(new Vector3(20, 0, 20), Color.Green));
+
+            CurentScene.AddToScene(new Cube(new Vector3(-20, 0, 20), Color.FromArgb(55, 234, 65)));
+            CurentScene.AddToScene(new Cube(new Vector3(20, 0, -20), Color.FromArgb(128, 77, 0)));
+            CurentScene.AddToScene(new Cube(new Vector3(-20, 0, -20), Color.FromArgb(0, 255, 209)));
+
         }
 
         private void Resize(object sender, EventArgs e)
         {
+          //  double size = MathHelper.DegreesToRadians(1 / 2.0);
             GL.Viewport(0,0,Window.Width,Window.Height);
-            GL.MatrixMode(MatrixMode.Projection);
-            GL.LoadIdentity();
+          //  GL.Frustum(-size, size, -size / (Window.Width / Window.Height), size / (Window.Width / Window.Height),1f,10000f);
+            Matrix4 m = Matrix4.CreateFromAxisAngle(currPos,root);
             Matrix4 matrix = Matrix4.CreatePerspectiveFieldOfView(1, Window.Width / Window.Height, 1f, 10000f);
+            matrix.ExtractRotation(true);
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.LoadIdentity();         
             GL.MultMatrix(ref matrix);
             GL.LoadMatrix(ref matrix);
             //GL.Ortho(-50,50,-50,50,-1,1);
@@ -54,16 +73,21 @@ namespace QuatroGameEngine
 
         private void Render(object sender, FrameEventArgs e)
         {
-         Vector3 camPos = new Vector3();
-         float camRoot = 0f;
-         float camRoot1 = 0f;
+            if (CurentScene == null)
+            {
+                InitScene();
+            }
 
+            Vector3 camPos = new Vector3();
+            float camRoot = 0f;
+            float camRoot1 = 0f;
 
             GL.LoadIdentity();
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             #region Input
 
+         
             if (InputSystem.GetKeyDown(Key.W))
             {
                 camPos = new Vector3(0, 0, 1);
@@ -116,21 +140,15 @@ namespace QuatroGameEngine
 
             #endregion
 
-            // Console.WriteLine(InputSystem.CurrentMouseForce());
             GL.PushMatrix();
+            GL.PopMatrix();
             GL.Translate(currPos += camPos);
-            
-            GL.Rotate(root += camRoot, 1,0,0);
+            GL.Rotate(root += camRoot, 1, 0, 0);
             GL.Rotate(root1 += camRoot1, 0, 1, 0);
-            new Cube(new Vector3(-20,0,0), Color.Blue);
-            new Cube(new Vector3(20, 0, 0), Color.Red);
-            new Cube(new Vector3(20, 0, 20), Color.Green);
+           // new Cube(new Vector3(-20, -20, 0), Color.Blue);
+            CurentScene.RenderScene();
 
-            new Cube(new Vector3(-20, 0, 20), Color.FromArgb(55, 234, 65));
-            new Cube(new Vector3(20, 0, -20), Color.FromArgb(128, 77, 0));
-            new Cube(new Vector3(-20, 0, -20), Color.FromArgb(0, 255, 209));
             Window.SwapBuffers();
-
             Console.Title = Window.RenderFrequency.ToString();
 
         }
@@ -139,7 +157,7 @@ namespace QuatroGameEngine
 
         private void Loaded(object obj, EventArgs e)
         {
-            GL.ClearColor(0.1f, 0.1f, 0, 0);
+            GL.ClearColor(Color.FromArgb(204, 217, 210));
             GL.Enable(EnableCap.DepthTest);
         }
     }

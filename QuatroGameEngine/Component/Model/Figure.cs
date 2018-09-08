@@ -9,16 +9,18 @@ using OpenTK.Graphics.OpenGL;
 
 namespace QuatroGameEngine.Component.Model
 {
-    public class Figure
+    public class Figure : GameComponent
     {
         public List<Vector3> VertexsList;
+        public Vector3 pos;
+        public Color color;
 
         public Figure()
         {
             
         }
 
-        public virtual void RenderFigure(Vector3 pos, Color color)
+        public virtual void RenderFigure()
         {
 
         }
